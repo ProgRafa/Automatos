@@ -10,8 +10,14 @@ html, body{
     border: 1px solid black;
 }
 
-.jumbotron{
-    margin: 60px;
+.linha{
+    height: 4px;
+    width: 10px;
+    border-radius: 3px;
+}
+
+.row>h1{
+    width: 100%;
 }
 
 .state{

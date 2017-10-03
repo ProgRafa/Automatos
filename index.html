@@ -14,13 +14,45 @@
 
     <body>
         <div class="container">
-                <div class="jumbotron">
-                    <div class="row" id="corpo">
-
+            <div class="row">
+                <h1 class="text-center">Automato Finito Determinístico</h1>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="jumbotron">
+                        <div class="row">
+                            <div class="linha bg-success"></div>
+                            <p>Estado Inicial</p>
+                        </div>
+                        <div class="row">
+                            <div class="linha bg-danger"></div>
+                            <p>Estado Atual</p>
+                        </div>
+                        <div class="row">
+                            <div class="linha bg-dark"></div>
+                            <p>Estado Final</p>
+                        </div>
                     </div>
                 </div>
+                <div class="col">
+                    <div class="jumbotron">
+                        <div class="row" id="corpo">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+                
                 <div class="row" id="keys">
                     
+                </div>
+                <div class="row d-flex justify-content-end">
+                    <div class="btn-group">
+                        <button style="border: 1px solid black" class="btn btn-primary">Previous State</button>
+                        <button style="border: 1px solid black" class="btn btn-primary">Next State</button>
+                    </div>
                 </div>
         </div>
 
