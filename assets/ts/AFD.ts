@@ -1,61 +1,66 @@
 import { State } from './State'
 import {ESTADOS} from './estados-mock'
 
+
 export class AFD {
-    public name: string
-    private alphabet: string[]
-    private states: State[]
+    private currentState: State
     private initialState: State
     private finalState: State[]
 
-    constructor(name: string, symbols: string[]){
-        this.name = name
-        this.alphabet = symbols
-    }
+    private wordCount: number = 0
 
-    addState(state: State): boolean{ 
-        try{
-            if(this.states === undefined)
-                this.states = [state]
-            else 
-                this.states.push(state)
-            return true
-        }catch(err){return false}
-    }
+    constructor(private word: string[], 
+                private alphabet: string[], 
+                private states: State[]){
+                this.setter(this.states)    
+                this.currentState = this.initialState
+                }
 
-    checkInitial(): State{
-        for(let i in this.states){
-            if(this.states[i].initial){
-                this.initialState = this.states[i]
-                return this.states[i]
+    setter(states: State[]){
+        for(var i in states){
+            this.setInital(states[i])
+            this.setFinals(states[i])        
+        }
+        if(!this.initialState)
+            throw "Não há estado inicial"
+        if(!this.finalState)
+            throw "Não há Estado(s) Final(is)"
+    }
+    setInital(state: State){
+        if(state.initial)
+            this.initialState = state
+        
+    }
+    setFinals(state: State){
+        if(state.final){
+            this.finalState = new Array()
+            this.finalState.push(state)
+        }
+    }
+    swippingStates(){
+        this.acessKeys(this.currentState)
+    }
+    acessKeys(state: State){
+        for(let i in state.targets){
+            console.log(state.targets[i]['key'])
+            if(this.searchKey(state.targets[i]['key'])){
+                this.currentState = this.states[1]
+                console.log(this.currentState)
             }
         }
-        throw("Erro ao encontrar initcial");
     }
+    searchKey(keys: string[]): boolean{
+        let sym = this.alphabet[this.wordCount]
 
-    checkFinal(): State[]{
-        for(let i in this.states){
-            if(this.states[i].initial){
-                if(this.finalState === undefined)
-                    this.finalState = [this.states[i]]
-                else
-                    this.finalState.push(this.states[i])
-            }
+        for(let j in keys){
+            console.log(j)
         }
-
-        if(this.finalState.length > 0){
-            return this.finalState
-        }else{
-            throw("Erro ao encontrar estados finais");
-        }
+        return true
     }
 }
 
-let teste = new AFD('TESTE', ['a', 'b', 'c']);
-console.log(teste.addState(ESTADOS[0]))
-console.log(teste.addState(ESTADOS[1]))
-console.log(teste.addState(ESTADOS[2]))
-console.log(teste.addState(ESTADOS[3]))
-console.log(teste.checkInitial())
-console.log(teste.checkFinal())
-console.log(teste)
+let teste = new AFD(['a', 'b', 'b', 'a'], ['a', 'b', 'c'], ESTADOS);
+
+teste.swippingStates()
+
+//console.log(teste)

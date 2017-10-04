@@ -1,120 +1,128 @@
-var State = /** @class */ (function () {
-    function State() {
-    }
-    State.prototype.showSymbols = function () {
-    };
-    State.prototype.getName = function () {
-        return this.name;
-    };
-    State.prototype.isInitial = function () {
-        return this.initial;
-    };
-    State.prototype.isFinal = function () {
-        return this.final;
-    };
-    return State;
-}());
-
 var AFD = /** @class */ (function () {
-    function AFD(name, symbols) {
-        this.name = name;
-        this.alphabet = symbols;
+    function AFD(word, alphabet, states) {
+        this.word = word;
+        this.alphabet = alphabet;
+        this.states = states;
+        this.wordCount = 0;
+        this.setter(this.states);
+        this.currentState = this.initialState;
     }
-    AFD.prototype.addState = function (state) {
-        try {
-            if (this.states === undefined)
-                this.states = [state];
-            else
-                this.states.push(state);
-            return true;
+    AFD.prototype.setter = function (states) {
+        for (var i in states) {
+            this.setInital(states[i]);
+            this.setFinals(states[i]);
         }
-        catch (err) {
-            return false;
+        if (!this.initialState)
+            throw "Não há estado inicial";
+        if (!this.finalState)
+            throw "Não há Estado(s) Final(is)";
+    };
+    AFD.prototype.setInital = function (state) {
+        if (state.initial)
+            this.initialState = state;
+    };
+    AFD.prototype.setFinals = function (state) {
+        if (state.final) {
+            this.finalState = new Array();
+            this.finalState.push(state);
         }
     };
-    AFD.prototype.checkInitial = function () {
-        for (var i in this.states) {
-            if (this.states[i].initial) {
-                this.initialState = this.states[i];
-                return this.states[i];
-            }
-        }
-        throw ("Erro ao encontrar estado inicial");
+    AFD.prototype.swippingStates = function () {
+        this.acessKeys(this.currentState);
     };
-    AFD.prototype.checkFinal = function () {
-        for (var i in this.states) {
-            if (this.states[i].final) {
-                if (this.finalState === undefined)
-                    this.finalState = [this.states[i]];
-                else
-                    this.finalState.push(this.states[i]);
+    AFD.prototype.acessKeys = function (state) {
+        for (var i in state.targets) {
+            if (this.searchKey(state.targets[i]['key'])) {
+                this.currentState = this.states[1];
+                console.log(this.currentState);
             }
         }
-        if (this.finalState) {
-            return this.finalState;
+    };
+    AFD.prototype.searchKey = function (keys) {
+        var sym = this.alphabet[this.wordCount];
+        for (var j in keys) {
+            console.log(keys[j]);
         }
-        else {
-            throw ("Erro ao encontrar estados finais");
-        }
+        return true;
     };
     return AFD;
 }());
 
-//Cria o AFD na página web
-function printAFD(AFD){
-    for(var i in AFD.states){
-        col = document.createElement("div")
-        col.className='col';
-        newElement = document.createElement("div")
-        if(AFD.states[i].initial)
-            newElement.style="border: 2px solid green"
-        if(AFD.states[i].final)
-            newElement.style="border: 2px solid black"
-        newElement.className = 'state'
-        newElement.innerText = AFD.states[i].name
-        document.getElementById('corpo').appendChild(col)
-        col.appendChild(newElement)
+TABELA = [
+    {
+        father: 'q0',
+        key: ['a'],
+        targetState: 'q1'
+    },
+    {
+        father: 'q0',
+        key: ['b'],
+        targetState: 'q2'
+    },
+    {
+        father: 'q1',
+        key: ['b'],
+        targetState: 'q2'
+    },
+    {
+        father: 'q2',
+        key: ['a', 'b'],
+        targetState: 'q3'
+    },
+    {
+        father: 'q3',
+        key: ['a', 'b'],
+        targetState: 'q3'
     }
-}
+];
 
-var ESTADOS = [
+ESTADOS = [
     {
         id: 0,
         name: 'q0',
-        symbol: [' '],
+        targets: [TABELA[0], TABELA[1]],
         initial: true,
         final: false,
     },
     {
         id: 1,
         name: 'q1',
-        symbol: [' '],
+        targets: [TABELA[2]],
         initial: false,
-        final: true,
+        final: false,
     },
     {
         id: 2,
         name: 'q2',
-        symbol: [' '],
+        targets: [TABELA[3]],
         initial: false,
         final: true,
     },
     {
         id: 3,
         name: 'q3',
-        symbol: [' '],
+        targets: [TABELA[4]],
         initial: false,
         final: true,
     }
 ];
-var teste = new AFD('TESTE', ['a', 'b', 'c']);
-console.log(teste.addState(ESTADOS[0]));
-console.log(teste.addState(ESTADOS[1]));
-console.log(teste.addState(ESTADOS[2]));
-console.log(teste.addState(ESTADOS[3]));
-console.log(teste.checkInitial());
-console.log(teste.checkFinal());
-console.log(teste);
 
+var teste = new AFD(['a', 'b', 'b', 'a'], ['a', 'b', 'c'], ESTADOS);
+teste.swippingStates();
 
-printAFD(teste)
+//Cria o AFD na página web
+// function printAFD(AFD){
+//     for(var i in AFD.states){
+//         col = document.createElement("div")
+//         col.className='col';
+//         newElement = document.createElement("div")
+//         if(AFD.states[i].initial)
+//             newElement.style="border: 2px solid green"
+//         if(AFD.states[i].final)
+//             newElement.style="border: 2px solid black"
+//         newElement.className = 'state'
+//         newElement.innerText = AFD.states[i].name
+//         document.getElementById('corpo').appendChild(col)
+//         col.appendChild(newElement)
+//     }
+// }

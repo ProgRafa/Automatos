@@ -2,55 +2,56 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var estados_mock_1 = require("./estados-mock");
 var AFD = /** @class */ (function () {
-    function AFD(name, symbols) {
-        this.name = name;
-        this.alphabet = symbols;
+    function AFD(word, alphabet, states) {
+        this.word = word;
+        this.alphabet = alphabet;
+        this.states = states;
+        this.wordCount = 0;
+        this.setter(this.states);
+        this.currentState = this.initialState;
     }
-    AFD.prototype.addState = function (state) {
-        try {
-            if (this.states === undefined)
-                this.states = [state];
-            else
-                this.states.push(state);
-            return true;
+    AFD.prototype.setter = function (states) {
+        for (var i in states) {
+            this.setInital(states[i]);
+            this.setFinals(states[i]);
         }
-        catch (err) {
-            return false;
+        if (!this.initialState)
+            throw "Não há estado inicial";
+        if (!this.finalState)
+            throw "Não há Estado(s) Final(is)";
+    };
+    AFD.prototype.setInital = function (state) {
+        if (state.initial)
+            this.initialState = state;
+    };
+    AFD.prototype.setFinals = function (state) {
+        if (state.final) {
+            this.finalState = new Array();
+            this.finalState.push(state);
         }
     };
-    AFD.prototype.checkInitial = function () {
-        for (var i in this.states) {
-            if (this.states[i].initial) {
-                this.initialState = this.states[i];
-                return this.states[i];
-            }
-        }
-        throw ("Erro ao encontrar initcial");
+    AFD.prototype.swippingStates = function () {
+        this.acessKeys(this.currentState);
     };
-    AFD.prototype.checkFinal = function () {
-        for (var i in this.states) {
-            if (this.states[i].initial) {
-                if (this.finalState === undefined)
-                    this.finalState = [this.states[i]];
-                else
-                    this.finalState.push(this.states[i]);
+    AFD.prototype.acessKeys = function (state) {
+        for (var i in state.targets) {
+            console.log(state.targets[i]['key']);
+            if (this.searchKey(state.targets[i]['key'])) {
+                this.currentState = this.states[1];
+                console.log(this.currentState);
             }
         }
-        if (this.finalState.length > 0) {
-            return this.finalState;
+    };
+    AFD.prototype.searchKey = function (keys) {
+        var sym = this.alphabet[this.wordCount];
+        for (var j in keys) {
+            console.log(j);
         }
-        else {
-            throw ("Erro ao encontrar estados finais");
-        }
+        return true;
     };
     return AFD;
 }());
 exports.AFD = AFD;
-var teste = new AFD('TESTE', ['a', 'b', 'c']);
-console.log(teste.addState(estados_mock_1.ESTADOS[0]));
-console.log(teste.addState(estados_mock_1.ESTADOS[1]));
-console.log(teste.addState(estados_mock_1.ESTADOS[2]));
-console.log(teste.addState(estados_mock_1.ESTADOS[3]));
-console.log(teste.checkInitial());
-console.log(teste.checkFinal());
-console.log(teste);
+var teste = new AFD(['a', 'b', 'b', 'a'], ['a', 'b', 'c'], estados_mock_1.ESTADOS);
+teste.swippingStates();
+//console.log(teste) 
