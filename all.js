@@ -8,8 +8,8 @@ var AFD = /** @class */ (function () {
         this.renderAFD();
         this.setter(this.states);
         this.currentState = this.initialState;
-        document.getElementById(this.initialState.id).className += " initial";
         document.getElementById(this.initialState.id).style = "background: red";
+        document.getElementById(this.initialState.id).className += " initial";
         for (var i in this.finalState)
             document.getElementById(this.finalState[i].id).className += " final";
     }
@@ -34,8 +34,14 @@ var AFD = /** @class */ (function () {
     };
     AFD.prototype.swippingStates = function () {
         if (this.wordCount == this.alphabet.length) {
-            document.getElementsByClassName('btn')[0].className+=" disabled"
+            document.getElementsByClassName('btn')[0].disabled = true;
             document.getElementById("keys").innerText += '}';
+            if (this.checkIsValid()) {
+                document.getElementById("auto").style = "background: rgba(10, 160, 60, 0.9);";
+            }
+            else {
+                document.getElementById("auto").style = "background: rgba(160, 30, 30, 0.9);";
+            }
             return;
         }
         this.updateBarWords(this.alphabet[this.wordCount]);
@@ -59,6 +65,9 @@ var AFD = /** @class */ (function () {
             }
         }
         return false;
+    };
+    AFD.prototype.checkIsValid = function () {
+        return this.currentState.final;
     };
     AFD.prototype.searchState = function (rot) {
         for (var i in this.states) {

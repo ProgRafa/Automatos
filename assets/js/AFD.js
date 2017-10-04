@@ -11,6 +11,7 @@ var AFD = /** @class */ (function () {
         this.renderAFD();
         this.setter(this.states);
         this.currentState = this.initialState;
+        document.getElementById(this.initialState.id).style = "background: red";
         document.getElementById(this.initialState.id).className += " initial";
         for (var i in this.finalState)
             document.getElementById(this.finalState[i].id).className += " final";
@@ -36,7 +37,7 @@ var AFD = /** @class */ (function () {
     };
     AFD.prototype.swippingStates = function () {
         if (this.wordCount == this.alphabet.length) {
-            document.getElementsByClassName('btn')[0].className += " disabled";
+            document.getElementsByClassName('btn')[0].disabled = true;
             document.getElementById("keys").innerText += '}';
             if (this.checkIsValid()) {
                 document.getElementById("auto").style = "background: rgba(10, 160, 60, 0.9);";
