@@ -16,9 +16,10 @@ var State = /** @class */ (function () {
 }());
 
 var AFD = /** @class */ (function () {
-    function AFD(name, symbols) {
+    function AFD(name, symbols, transition) {
         this.name = name;
         this.alphabet = symbols;
+        this.transitionTable = transition
     }
     AFD.prototype.addState = function (state) {
         try {
@@ -57,6 +58,11 @@ var AFD = /** @class */ (function () {
             throw ("Erro ao encontrar estados finais");
         }
     };
+    AFD.prototype.showTransitionTable = function () {
+        for(var i in this.transitionTable){
+            
+        }
+    }
     return AFD;
 }());
 
@@ -107,14 +113,32 @@ var ESTADOS = [
         final: true,
     }
 ];
-var teste = new AFD('TESTE', ['a', 'b', 'c']);
+var transition = [
+    {
+        currentState: 'q0',
+        key: ['a'],
+        targetState: 'q1'
+    },
+    {
+        currentState: 'q1',
+        key: ['b'],
+        targetState: 'q2'
+    },
+    {
+        currentState: 'q2',
+        key: ['a', 'b'],
+        targetState: 'q3'
+    }
+]
+
+
+var teste = new AFD('TESTE', ['a', 'b', 'c'], transition);
 console.log(teste.addState(ESTADOS[0]));
 console.log(teste.addState(ESTADOS[1]));
 console.log(teste.addState(ESTADOS[2]));
 console.log(teste.addState(ESTADOS[3]));
 console.log(teste.checkInitial());
 console.log(teste.checkFinal());
-console.log(teste);
-
+console.log(teste.showTransitionTable());
 
 printAFD(teste)

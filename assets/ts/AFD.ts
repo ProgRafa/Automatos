@@ -1,16 +1,23 @@
 import { State } from './State'
 import {ESTADOS} from './estados-mock'
+import { Transition } from './Transition'
+import { TABELA } from './transition-mock'
 
 export class AFD {
-    public name: string
+    public word: string[]
+
     private alphabet: string[]
     private states: State[]
+    private transitionTable: Transition[]
+
     private initialState: State
+    private currentState: string = ''
     private finalState: State[]
 
-    constructor(name: string, symbols: string[]){
-        this.name = name
+    constructor(word: string[], symbols: string[], transition: Transition[]){
+        this.word = word
         this.alphabet = symbols
+        this.transitionTable = transition
     }
 
     addState(state: State): boolean{ 
@@ -49,9 +56,19 @@ export class AFD {
             throw("Erro ao encontrar estados finais");
         }
     }
+    verifyValidWord(): boolean{
+        for(let i in this.word){
+            this.word[i].find(this.swippingAlphabet) 
+        }    
+        
+        return false
+    }
+    swippingAlphabet(id: number): boolean{
+        return true 
+    }
 }
 
-let teste = new AFD('TESTE', ['a', 'b', 'c']);
+let teste = new AFD(['a', 'b', 'b', 'a'], ['a', 'b', 'c'], TABELA)
 console.log(teste.addState(ESTADOS[0]))
 console.log(teste.addState(ESTADOS[1]))
 console.log(teste.addState(ESTADOS[2]))
