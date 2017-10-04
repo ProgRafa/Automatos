@@ -29,4 +29,31 @@ html, body{
     background: orange;
     align-items: center;
     justify-content: center;
+    transition: all ease 0.8s;
+}
+
+.initial{
+    border: 2px solid rgb(25, 140, 25);
+}
+.initial:after{
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 35px;
+    height: 5px;
+    border-radius: 4px 0; 
+    background: black;
+}
+
+.final{
+    border: 2px solid black;
+}
+
+.final:before{
+    position: absolute;
+    content: '';
+    width: 50px;
+    height: 50px;
+    border: 2px solid black;
+    border-radius: 50%;
 }
