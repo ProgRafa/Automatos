@@ -23,16 +23,18 @@ var AFD = /** @class */ (function () {
         if (!this.finalState)
             throw "Não há Estado(s) Final(is)";
     };
+	
     AFD.prototype.setInital = function (state) {
-        if (state.initial) {
+        if(state.initial)
             this.initialState = state;
-        }
     };
+	
     AFD.prototype.setFinals = function (state) {
-        if (state.final)
+        if(state.final)
             this.finalState.push(state);
     };
-    AFD.prototype.swippingStates = function () {
+	
+    AFD.prototype.swippingStates = function() {
         if (this.wordCount == this.alphabet.length) {
             document.getElementsByClassName('btn')[0].disabled = true;
             document.getElementById("keys").innerText += '}';
